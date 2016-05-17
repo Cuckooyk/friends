@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	
+	 <!-- 把struts的action对象交给spring容器管理 -->
+	<constant name="struts.objectFactory " value="spring" />
+
+	<package name="default" namespace="/" extends="struts-default">
+	<interceptors>
+		<interceptor name="loginInterceptor" class="com.yc.vote.web.interceptor.LoginInterceptor"/>
+		<interceptor-stack name="myStack">
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="loginInterceptor">
+				<param name="includeMethods">vote,save</param>
+			</interceptor-ref>
+		</interceptor-stack>	
+	</interceptors>
+	
+	<global-results>
+		<result name="login" type="redirect">page/login.jsp</result>
+	</global-results>
+	
+		<action name="dologin" class="loginAction" method="login">
+			<result >/index.jsp</result>
+			<result name="fail">/page/login.jsp</result>
+		</action>
+		<action name="doregister" class="registerAction" method="register">
+			<result>/page/reg_success.jsp</result>
+			<result name="fail">/page/register.jsp</result>
+		</action>
+		
+		<action name="*_*" class="{1}Action" method="{2}">
+			<interceptor-ref name="myStack"/>
+			<result name="{2}">/page/{2}.jsp</result>
+			<result name="savefail">/page/vote.jsp</result>
+			<result name="saveSuccess">/page/saveSuccess.jsp</result>
+		</action>
+	</package>
+</struts>

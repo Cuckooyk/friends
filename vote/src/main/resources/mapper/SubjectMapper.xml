@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 使用映射接口的方式， 命名空间的值必须与映射接口的全限定名一致 -->
+<mapper namespace="com.yc.vote.mapper.SubjectMapper">
+
+	<resultMap type="SubjectBean" id="SubjectMaps">
+		<id column="VS_ID" property="id" />
+		<result column="VS_TITLE" property="title" />
+		<result column="VS_TYPE" property="type" />
+	</resultMap>
+	<select id="getAllSubjects" resultMap="SubjectMaps">
+		select VS_ID,VS_TITLE,VS_TYPE,
+		(select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)optionCount,
+		(select count(*) from VOTE_ITEM where VS_ID=s.VS_ID)userCount from VOTE_SUBJECT s
+	</select>
+	
+	<sql id="selectSubject">
+		select VS_ID,VS_TITLE,VS_TYPE,
+		(select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)optionCount,
+		(select count(*) from VOTE_ITEM where VS_ID=s.VS_ID)userCount 
+		from VOTE_SUBJECT s where VS_ID = #{vsId}
+	</sql>
+	
+	<resultMap type="ViewBean" id="ViewMap">
+		<id column="VS_ID" property="id" />
+		<result column="VS_TITLE" property="title" />
+		<collection property="count" column="VS_ID" javaType="list" select="getOptionVoteCountByVsId"/>
+	</resultMap>
+	<select id="getViewByVsId" parameterType="int" resultMap="ViewMap">
+		<include refid="selectSubject"/>
+	</select>
+	<select id="getOptionVoteCountByVsId" parameterType="int" resultType="int">
+		select count(i.VO_ID) from VOTE_OPTION o 
+		left join VOTE_ITEM i on o.VO_ID = i.VO_ID where o.VS_ID = #{vsId}
+		group by VO_ORDER order by VO_ORDER
+	</select>
+	
+	<resultMap type="OptionBean" id="OptionsMap">
+		<id column="VS_ID" property="id" />
+		<result column="VS_TITLE" property="title" />
+		<result column="VS_TYPE" property="type" />
+		<collection property="options" column="VS_ID" javaType="list" select="getOptions"/>
+	</resultMap>
+	<resultMap type="Option" id="OptionMap">
+		<id column="VO_ID" property="id"/>
+		<result column="VO_OPTION" property="name" />
+		<result column="VS_ID" property="vsid" />
+	</resultMap>
+	<select id="getOptionsByVsId" parameterType="int" resultMap="OptionsMap">
+		<include refid="selectSubject"/>
+	</select>
+	<select id="getOptions" parameterType="int" resultMap="OptionMap">
+		select * from VOTE_OPTION where VS_ID = #{vsId}
+	</select>
+	
+	
+	<insert id="addSubject" parameterType="Subject">
+		<selectKey keyColumn="currId" keyProperty="id" order="BEFORE" resultType="int">
+			select seq_subject.nextval currId from dual
+		</selectKey>
+		insert into VOTE_SUBJECT values (#{id},#{title}, #{type})
+	</insert>
+	
+	<insert id="addOption" parameterType="Option">
+		insert into VOTE_OPTION values (seq_option.nextval, #{name},#{vsid}, #{order})
+	</insert>
+</mapper>

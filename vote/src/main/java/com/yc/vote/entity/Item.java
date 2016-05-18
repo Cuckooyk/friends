@@ -1,6 +1,5 @@
 package com.yc.vote.entity;
 
-import java.util.Set;
 
 public class Item {
 	private int id;// 投票id

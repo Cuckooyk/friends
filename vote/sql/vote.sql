@@ -6,7 +6,7 @@ select * from VOTE_SUBJECT;--投票主题
 select VS_ID,VS_TITLE,VS_TYPE,
 (select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)OptionCount,
 (select count(VU_USER_ID) from VOTE_ITEM where VS_ID=s.VS_ID)UserCount from VOTE_SUBJECT s where VS_ID = '103'
-
+--kakak
 
 select count(VU_USER_ID) from VOTE_ITEM where VS_ID='103'
 select * from VOTE_OPTION where VS_ID = '101'

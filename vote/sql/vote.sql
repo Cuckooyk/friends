@@ -3,6 +3,7 @@ select * from VOTE_ITEM;--用户投票取值表
 select * from VOTE_OPTION;--投票内容对应的选项表
 select * from VOTE_SUBJECT;--投票主题1
 
+--hahahha
 select VS_ID,VS_TITLE,VS_TYPE,
 (select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)OptionCount,
 (select count(VU_USER_ID) from VOTE_ITEM where VS_ID=s.VS_ID)UserCount from VOTE_SUBJECT s where VS_ID = '103'

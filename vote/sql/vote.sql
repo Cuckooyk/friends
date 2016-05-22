@@ -8,7 +8,7 @@ select VS_ID,VS_TITLE,VS_TYPE,
 (select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)OptionCount,
 (select count(VU_USER_ID) from VOTE_ITEM where VS_ID=s.VS_ID)UserCount from VOTE_SUBJECT s where VS_ID = '103'
 
-
+--施诗改的内容
 select count(VU_USER_ID) from VOTE_ITEM where VS_ID='103'
 select * from VOTE_OPTION where VS_ID = '101'
 select count(i.VO_ID) from VOTE_OPTION o 

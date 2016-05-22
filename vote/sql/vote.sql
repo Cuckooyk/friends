@@ -1,7 +1,7 @@
 select * from VOTE_USER;--用户表
 select * from VOTE_ITEM;--用户投票取值表
 select * from VOTE_OPTION;--投票内容对应的选项表
-select * from VOTE_SUBJECT;--投票主题
+select * from VOTE_SUBJECT;--投票主题1
 
 select VS_ID,VS_TITLE,VS_TYPE,
 (select count(*) from VOTE_OPTION where VS_ID=s.VS_ID)OptionCount,

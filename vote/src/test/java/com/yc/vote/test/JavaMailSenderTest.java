@@ -23,7 +23,7 @@ public class JavaMailSenderTest {
     public void testSendEmail(){
     	SimpleMailMessage smm = new SimpleMailMessage();
     	smm.setFrom("studymail_test@163.com");
-    	smm.setTo("517302276@qq.com");
+    	smm.setTo("1274421194@qq.com");
     	smm.setSubject("拿我耳机来");
     	smm.setText("快拿我耳机来，不然发爆你邮箱");
     	
